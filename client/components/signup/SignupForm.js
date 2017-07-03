@@ -42,7 +42,10 @@ class SignupForm extends React.Component {
         if (this.isValid()) {
             this.setState({ errors: {}, isLoading: true });
             this.props.userSignupRequest(this.state).then(
-                () => {}, ({ data }) => this.setState({ errors: data, isLoading: false })
+              () => {
+                this.context.router.push('/');
+              },
+              ({ data }) => this.setState({ errors: data, isLoading: false })
             );
         }
     }
@@ -50,8 +53,8 @@ class SignupForm extends React.Component {
     render() {
         const { errors } = this.state;
         const options = map(timezones, (val, key) =>
-                            <option key={val} value={val}>{key}</option>
-                           );
+          <option key={val} value={val}>{key}</option>
+        );
         return (
             <form onSubmit={this.onSubmit}>
               <h1>Join our community</h1>
@@ -78,14 +81,16 @@ class SignupForm extends React.Component {
                 onChange={this.onChange}
                 value={this.state.password}
                 field="password"
+                type="password"
                 />
 
               <TextFieldGroup
                 error={errors.passwordConfirmation}
-                label="PasswordConfirmation"
+                label="Password Confirmation"
                 onChange={this.onChange}
                 value={this.state.passwordConfirmation}
                 field="passwordConfirmation"
+                type="password"
                 />
 
               <div className={classnames("form-group", { 'has-error': errors.timezone })}>
@@ -114,6 +119,10 @@ class SignupForm extends React.Component {
 
 SignupForm.propTypes = {
     userSignupRequest: React.PropTypes.func.isRequired
+};
+
+SignupForm.contextTypes = {
+  router: React.PropTypes.object.isRequired
 };
 
 export default SignupForm;
